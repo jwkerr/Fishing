@@ -45,6 +45,11 @@ public class FishingEventTownCommand implements TabExecutor {
             return;
         }
 
+        if (!activeEvent.hasStarted()) {
+            sender.sendMessage(Component.text("The fishing event has not started yet", NamedTextColor.RED));
+            return;
+        }
+
         Map<UUID, Integer> topTen = em.getActiveEvent().getNumFishCaught().entrySet().stream()
                 .sorted(Map.Entry.<UUID, Integer>comparingByValue().reversed())
                 .limit(10)
