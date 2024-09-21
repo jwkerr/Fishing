@@ -28,6 +28,8 @@ public final class EventManager {
     public void endEvent(boolean ceremoniously) {
         if (activeEvent == null) return;
 
+        activeEvent.cleanup();
+
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.hideBossBar(activeEvent.getBossBar());
         }
@@ -37,7 +39,7 @@ public final class EventManager {
             if (lead == null) {
                 activeEvent.getAudience().sendMessage(Component.text("The fishing event has concluded, nobody won :(", Fishing.GOLD_COLOUR));
             } else {
-                activeEvent.getAudience().sendMessage(Component.text("The fishing event has concluded, the winner was " + lead.getName() + " with " + activeEvent.getNumFishCaught(lead.getUniqueId()) + "fish!", Fishing.GOLD_COLOUR));
+                activeEvent.getAudience().sendMessage(Component.text("The fishing event has concluded, the winner was " + lead.getName() + " with " + activeEvent.getNumFishCaught(lead.getUniqueId()) + " fish!", Fishing.GOLD_COLOUR));
             }
         }
 

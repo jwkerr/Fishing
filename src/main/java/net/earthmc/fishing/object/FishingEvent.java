@@ -59,19 +59,15 @@ public class FishingEvent {
         bossBarTask = instance.getServer().getGlobalRegionScheduler().runAtFixedRate(instance, task -> updateBossBar(), 1, 20);
     }
 
-    public void cancel() {
-        scheduledEnding.cancel(); // We are forcefully cancelling so no need to schedule a proper ending any more
+    public void cleanup() {
+        scheduledEnding.cancel();
         bossBarTask.cancel();
-        EventManager.getInstance().endEvent(false);
     }
 
     private void scheduleEnding(int endInTicks) {
         Fishing instance = Fishing.getInstance();
 
-        scheduledEnding = instance.getServer().getGlobalRegionScheduler().runDelayed(instance, task -> {
-            bossBarTask.cancel();
-            EventManager.getInstance().endEvent(true);
-        }, endInTicks);
+        scheduledEnding = instance.getServer().getGlobalRegionScheduler().runDelayed(instance, task -> EventManager.getInstance().endEvent(true), endInTicks);
     }
 
     public void addCaughtFish(UUID uuid) {
@@ -98,7 +94,6 @@ public class FishingEvent {
     public void updateBossBar() {
         Component name;
         float progress;
-
 
         if (!hasStarted()) {
             name = Component.text("Please wait for the fishing event to start!", Fishing.GOLD_COLOUR);

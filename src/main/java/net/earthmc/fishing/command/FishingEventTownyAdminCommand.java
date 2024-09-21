@@ -24,27 +24,40 @@ public class FishingEventTownyAdminCommand implements TabExecutor {
 
         String method = args[0];
         switch (method) {
-            case "cancel" -> cancelFishingEvent(sender);
+            case "cancel" -> cancelFishingEvent(sender, args);
             default -> sender.sendMessage(Component.text("Invalid method provided", NamedTextColor.RED));
         }
 
         return true;
     }
 
-    private void cancelFishingEvent(CommandSender sender) {
-        FishingEvent activeEvent = EventManager.getInstance().getActiveEvent();
+    private void cancelFishingEvent(CommandSender sender, String[] args) {
+        EventManager em = EventManager.getInstance();
+
+        FishingEvent activeEvent = em.getActiveEvent();
         if (activeEvent == null) {
             sender.sendMessage(Component.text("There are no fishing events currently", NamedTextColor.RED));
             return;
         }
 
-        activeEvent.cancel();
+        boolean ceremoniously;
+        try {
+            ceremoniously = Boolean.parseBoolean(args[1]);
+        } catch (IndexOutOfBoundsException e) {
+            ceremoniously = true;
+        }
+
+        em.endEvent(ceremoniously);
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Stream<String> stream = switch (args.length) {
             case 1 -> Stream.of("cancel");
+            case 2 -> switch (args[0]) {
+                case "cancel" -> Stream.of("true", "false");
+                default -> null;
+            };
             default -> null;
         };
 
