@@ -151,12 +151,12 @@ public class FishingEvent {
     }
 
     public float getProgress() {
-        long timePassed = Instant.now().getEpochSecond();
+        long timePassed = Instant.now().getEpochSecond() - startedAt;
         int totalDurationInSeconds = duration * 60;
 
         float progress = (float) timePassed / totalDurationInSeconds;
 
-        return Math.max(1, progress);
+        return Math.min(progress, 1F);
     }
 
     public int getTotalFishCaught() {
