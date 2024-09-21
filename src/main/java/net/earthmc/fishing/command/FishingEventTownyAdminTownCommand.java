@@ -69,11 +69,11 @@ public class FishingEventTownyAdminTownCommand implements TabExecutor {
         Stream<String> stream = switch (args.length) {
             case 2 -> Stream.of("start");
             case 3 -> switch (args[1]) {
-                case "start" -> Stream.of("{duration_ticks}");
+                case "start" -> Stream.of("{duration_mins}");
                 default -> null;
             };
             case 4 -> switch (args[1]) {
-                case "start" -> Stream.of("{delay_ticks}");
+                case "start" -> Stream.of("{delay_mins}");
                 default -> null;
             };
             default -> null;

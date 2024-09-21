@@ -16,11 +16,13 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 public class FishingEvent {
 
@@ -40,23 +42,20 @@ public class FishingEvent {
     public FishingEvent(Town town, int duration, int delay) {
         this.town = town;
         this.duration = duration;
-
-        if (delay <= 0) delay = 1;
         this.delay = delay;
-
-        this.createdAt = town.getWorld().getGameTime();
+        this.createdAt = Instant.now().getEpochSecond();
     }
 
     public void register() {
         EventManager.getInstance().setActiveEvent(this);
         Fishing instance = Fishing.getInstance();
 
-        instance.getServer().getGlobalRegionScheduler().runDelayed(instance, task -> {
-            startedAt = town.getWorld().getGameTime();
-            scheduleEnding(duration);
-        }, delay);
+        instance.getServer().getAsyncScheduler().runDelayed(instance, task -> {
+            startedAt = Instant.now().getEpochSecond();
+            scheduleEnding();
+        }, delay, TimeUnit.MINUTES);
 
-        bossBarTask = instance.getServer().getGlobalRegionScheduler().runAtFixedRate(instance, task -> updateBossBar(), 1, 20);
+        bossBarTask = instance.getServer().getAsyncScheduler().runAtFixedRate(instance, task -> updateBossBar(), 1, 1, TimeUnit.SECONDS);
     }
 
     public void cleanup() {
@@ -64,10 +63,9 @@ public class FishingEvent {
         bossBarTask.cancel();
     }
 
-    private void scheduleEnding(int endInTicks) {
+    private void scheduleEnding() {
         Fishing instance = Fishing.getInstance();
-
-        scheduledEnding = instance.getServer().getGlobalRegionScheduler().runDelayed(instance, task -> EventManager.getInstance().endEvent(true), endInTicks);
+        scheduledEnding = instance.getServer().getAsyncScheduler().runDelayed(instance, task -> EventManager.getInstance().endEvent(true), duration, TimeUnit.MINUTES);
     }
 
     public void addCaughtFish(UUID uuid) {
@@ -98,8 +96,10 @@ public class FishingEvent {
         if (!hasStarted()) {
             name = Component.text("Please wait for the fishing event to start!", Fishing.BLUE_COLOUR);
 
-            long ticksPassed = town.getWorld().getGameTime() - createdAt;
-            progress = 1F - Math.min((float) ticksPassed / delay, 1F);
+            long timePassed = Instant.now().getEpochSecond() - createdAt;
+            int totalDelayinSeconds = delay * 60;
+
+            progress = 1F - Math.min((float) timePassed / totalDelayinSeconds, 1F);
         } else {
             Component dash = Component.text(" - ", NamedTextColor.DARK_GRAY);
 
@@ -151,8 +151,12 @@ public class FishingEvent {
     }
 
     public float getProgress() {
-        long ticksPassed = town.getWorld().getGameTime() - startedAt;
-        return Math.min((float) ticksPassed / duration, 1F);
+        long timePassed = Instant.now().getEpochSecond();
+        int totalDurationInSeconds = duration * 60;
+
+        float progress = (float) timePassed / totalDurationInSeconds;
+
+        return Math.max(1, progress);
     }
 
     public int getTotalFishCaught() {
