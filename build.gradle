@@ -54,7 +54,7 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 tasks.named("jar") {
-    archiveFileName = "${project.name}-${version}.jar"
+    archiveFileName = "${project.name}+${version}.jar"
 }
 
 processResources {
