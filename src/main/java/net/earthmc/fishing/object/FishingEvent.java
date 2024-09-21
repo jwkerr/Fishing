@@ -60,7 +60,7 @@ public class FishingEvent {
     }
 
     public void cleanup() {
-        scheduledEnding.cancel();
+        if (hasStarted()) scheduledEnding.cancel();
         bossBarTask.cancel();
     }
 
