@@ -1,0 +1,9 @@
+name: Fishing
+version: "${version}"
+main: net.earthmc.fishing.Fishing
+api-version: "1.20"
+authors: [Fruitloopins]
+description: Fishing event plugin
+website: https://earthmc.net
+depends: [Towny]
+folia-supported: true
