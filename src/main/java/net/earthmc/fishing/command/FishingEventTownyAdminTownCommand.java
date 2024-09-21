@@ -25,7 +25,7 @@ public class FishingEventTownyAdminTownCommand implements TabExecutor {
             return true;
         }
 
-        if (args.length < 3) {
+        if (args.length < 2) {
             sender.sendMessage(Component.text("No method provided", NamedTextColor.RED));
             return true;
         }

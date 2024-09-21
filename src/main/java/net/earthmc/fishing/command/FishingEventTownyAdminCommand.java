@@ -22,7 +22,7 @@ public class FishingEventTownyAdminCommand implements TabExecutor {
             return true;
         }
 
-        String method = args[2];
+        String method = args[1];
         switch (method) {
             case "cancel" -> cancelFishingEvent(sender);
             default -> sender.sendMessage(Component.text("Invalid method provided", NamedTextColor.RED));
