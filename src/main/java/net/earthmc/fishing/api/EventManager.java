@@ -37,9 +37,9 @@ public final class EventManager {
         if (ceremoniously && activeEvent.hasStarted()) {
             OfflinePlayer lead = activeEvent.getLeadPlayer();
             if (lead == null) {
-                activeEvent.getAudience().sendMessage(Component.text("The fishing event has concluded, nobody won :(", Fishing.GOLD_COLOUR));
+                activeEvent.getAudience().sendMessage(Component.text("The fishing event has concluded, nobody won :(", Fishing.BLUE_COLOUR));
             } else {
-                activeEvent.getAudience().sendMessage(Component.text("The fishing event has concluded, the winner was " + lead.getName() + " with " + activeEvent.getNumFishCaught(lead.getUniqueId()) + " fish!", Fishing.GOLD_COLOUR));
+                activeEvent.getAudience().sendMessage(Component.text("The fishing event has concluded, the winner was " + lead.getName() + " with " + activeEvent.getNumFishCaught(lead.getUniqueId()) + " fish!", Fishing.BLUE_COLOUR));
             }
         }
 

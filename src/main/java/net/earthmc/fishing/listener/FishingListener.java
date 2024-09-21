@@ -6,7 +6,6 @@ import net.earthmc.fishing.Fishing;
 import net.earthmc.fishing.api.EventManager;
 import net.earthmc.fishing.object.FishingEvent;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -45,6 +44,6 @@ public class FishingListener implements Listener {
 
         if (isFish) fe.addCaughtFish(player.getUniqueId());
 
-        player.sendActionBar(Component.text("You have caught " + fe.getNumFishCaught(player.getUniqueId()) + " fish", Fishing.GOLD_COLOUR));
+        player.sendActionBar(Component.text("You have caught " + fe.getNumFishCaught(player.getUniqueId()) + " fish", Fishing.BLUE_COLOUR));
     }
 }

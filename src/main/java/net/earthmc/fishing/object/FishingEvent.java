@@ -96,7 +96,7 @@ public class FishingEvent {
         float progress;
 
         if (!hasStarted()) {
-            name = Component.text("Please wait for the fishing event to start!", Fishing.GOLD_COLOUR);
+            name = Component.text("Please wait for the fishing event to start!", Fishing.BLUE_COLOUR);
 
             long ticksPassed = town.getWorld().getGameTime() - createdAt;
             progress = 1F - Math.min((float) ticksPassed / delay, 1F);
@@ -104,14 +104,14 @@ public class FishingEvent {
             Component dash = Component.text(" - ", NamedTextColor.DARK_GRAY);
 
             TextComponent.Builder builder = Component.text();
-            builder.append(Component.text(town.getName(), Fishing.GOLD_COLOUR));
+            builder.append(Component.text(town.getName(), Fishing.BLUE_COLOUR));
             builder.append(dash);
-            builder.append(Component.text("Total fish caught: " + getTotalFishCaught(), Fishing.GOLD_COLOUR));
+            builder.append(Component.text("Total fish caught: " + getTotalFishCaught(), Fishing.BLUE_COLOUR));
 
             OfflinePlayer lead = getLeadPlayer();
             if (lead != null) {
                 builder.append(dash);
-                builder.append(Component.text("Lead: " + lead.getName() + " (" + getLeadEntry().getValue() + ")", Fishing.GOLD_COLOUR));
+                builder.append(Component.text("Lead: " + lead.getName() + " (" + getLeadEntry().getValue() + ")", Fishing.BLUE_COLOUR));
             }
 
             name = builder.build();
@@ -119,7 +119,7 @@ public class FishingEvent {
         }
 
         if (bossBar == null) {
-            bossBar = BossBar.bossBar(name, progress, BossBar.Color.GREEN, BossBar.Overlay.NOTCHED_6);
+            bossBar = BossBar.bossBar(name, progress, BossBar.Color.BLUE, BossBar.Overlay.NOTCHED_6);
             getAudience().forEachAudience(a -> a.showBossBar(bossBar));
             return;
         }

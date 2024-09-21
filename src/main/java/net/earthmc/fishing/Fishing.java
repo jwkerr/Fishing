@@ -13,7 +13,7 @@ public final class Fishing extends JavaPlugin {
 
     private static Fishing instance;
 
-    public static final TextColor GOLD_COLOUR = TextColor.color(233, 177, 21);
+    public static final TextColor BLUE_COLOUR = TextColor.color(20, 200, 200);
 
     @Override
     public void onEnable() {
