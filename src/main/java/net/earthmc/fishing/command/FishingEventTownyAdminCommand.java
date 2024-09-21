@@ -17,7 +17,7 @@ public class FishingEventTownyAdminCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (args.length < 1) {
+        if (args.length == 0) {
             sender.sendMessage(Component.text("No method provided", NamedTextColor.RED));
             return true;
         }
