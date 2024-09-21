@@ -3,6 +3,7 @@ package net.earthmc.fishing.listener;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.event.player.PlayerEntersIntoTownBorderEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerExitsFromTownBorderEvent;
+import com.palmergames.bukkit.towny.event.teleport.SuccessfulTownyTeleportEvent;
 import com.palmergames.bukkit.towny.object.Town;
 import net.earthmc.fishing.api.EventManager;
 import net.earthmc.fishing.object.FishingEvent;
@@ -34,6 +35,21 @@ public class BossBarListener implements Listener {
 
         BossBar bossBar = fe.getBossBar();
         event.getPlayer().hideBossBar(bossBar);
+    }
+
+    @EventHandler
+    public void onPlayerSpawn(SuccessfulTownyTeleportEvent event) {
+        EventManager em = EventManager.getInstance();
+        FishingEvent fe = em.getActiveEvent();
+        if (fe == null) return;
+
+        Player player = event.getResident().getPlayer();
+        if (player == null) return;
+
+        Town town = TownyAPI.getInstance().getTown(event.getTeleportLocation());
+
+        BossBar bossBar = fe.getBossBar();
+        if (fe.getTown().equals(town)) player.showBossBar(bossBar);
     }
 
     @EventHandler
