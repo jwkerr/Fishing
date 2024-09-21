@@ -34,7 +34,7 @@ public class FishingEventTownyAdminCommand implements TabExecutor {
     private void cancelFishingEvent(CommandSender sender) {
         FishingEvent activeEvent = EventManager.getInstance().getActiveEvent();
         if (activeEvent == null) {
-            sender.sendMessage(Component.text("There are no fishing events currently"));
+            sender.sendMessage(Component.text("There are no fishing events currently", NamedTextColor.RED));
             return;
         }
 
