@@ -34,7 +34,7 @@ public final class EventManager {
             player.hideBossBar(activeEvent.getBossBar());
         }
 
-        if (ceremoniously) {
+        if (ceremoniously && activeEvent.hasStarted()) {
             OfflinePlayer lead = activeEvent.getLeadPlayer();
             if (lead == null) {
                 activeEvent.getAudience().sendMessage(Component.text("The fishing event has concluded, nobody won :(", Fishing.GOLD_COLOUR));
