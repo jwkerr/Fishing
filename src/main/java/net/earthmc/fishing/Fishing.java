@@ -1,6 +1,7 @@
 package net.earthmc.fishing;
 
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
+import net.earthmc.fishing.command.FishingEventTownCommand;
 import net.earthmc.fishing.command.FishingEventTownyAdminCommand;
 import net.earthmc.fishing.command.FishingEventTownyAdminTownCommand;
 import net.earthmc.fishing.listener.BossBarListener;
@@ -33,6 +34,7 @@ public final class Fishing extends JavaPlugin {
     private void registerCommands() {
         TownyCommandAddonAPI.addSubCommand(TownyCommandAddonAPI.CommandType.TOWNYADMIN_TOWN, "fishingevent", new FishingEventTownyAdminTownCommand());
         TownyCommandAddonAPI.addSubCommand(TownyCommandAddonAPI.CommandType.TOWNYADMIN, "fishingevent", new FishingEventTownyAdminCommand());
+        TownyCommandAddonAPI.addSubCommand(TownyCommandAddonAPI.CommandType.TOWN, "fishingevent", new FishingEventTownCommand());
     }
 
     private void registerListeners() {

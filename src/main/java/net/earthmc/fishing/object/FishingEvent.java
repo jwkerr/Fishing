@@ -173,11 +173,15 @@ public class FishingEvent {
         return numFishCaught.getOrDefault(uuid, 0);
     }
 
-    public BossBar getBossBar() {
+    public @NotNull Map<UUID, Integer> getNumFishCaught() {
+        return numFishCaught;
+    }
+
+    public @NotNull BossBar getBossBar() {
         return bossBar;
     }
 
-    public Town getTown() {
+    public @NotNull Town getTown() {
         return town;
     }
 }

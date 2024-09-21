@@ -1,19 +1,24 @@
 package net.earthmc.fishing.command;
 
+import net.earthmc.fishing.Fishing;
 import net.earthmc.fishing.api.EventManager;
 import net.earthmc.fishing.object.FishingEvent;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class FishingEventTownyAdminCommand implements TabExecutor {
+public class FishingEventTownCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -24,14 +29,14 @@ public class FishingEventTownyAdminCommand implements TabExecutor {
 
         String method = args[0];
         switch (method) {
-            case "cancel" -> cancelFishingEvent(sender, args);
+            case "top" -> sendTopList(sender);
             default -> sender.sendMessage(Component.text("Invalid method provided", NamedTextColor.RED));
         }
 
         return true;
     }
 
-    private void cancelFishingEvent(CommandSender sender, String[] args) {
+    private void sendTopList(CommandSender sender) {
         EventManager em = EventManager.getInstance();
 
         FishingEvent activeEvent = em.getActiveEvent();
@@ -40,24 +45,34 @@ public class FishingEventTownyAdminCommand implements TabExecutor {
             return;
         }
 
-        boolean ceremoniously;
-        try {
-            ceremoniously = Boolean.parseBoolean(args[1]);
-        } catch (IndexOutOfBoundsException e) {
-            ceremoniously = true;
+        Map<UUID, Integer> topTen = em.getActiveEvent().getNumFishCaught().entrySet().stream()
+                .sorted(Map.Entry.<UUID, Integer>comparingByValue().reversed())
+                .limit(10)
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
+
+        List<Component> components = new ArrayList<>();
+
+        for (Map.Entry<UUID, Integer> entry : topTen.entrySet()) {
+            OfflinePlayer player = Bukkit.getOfflinePlayer(entry.getKey());
+
+            String name = player.getName();
+            if (name == null) continue;
+
+            components.add(Component.text(name + ": " + entry.getValue(), Fishing.BLUE_COLOUR));
         }
 
-        em.endEvent(ceremoniously);
+        sender.sendMessage(Component.join(JoinConfiguration.newlines(), components));
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Stream<String> stream = switch (args.length) {
-            case 1 -> Stream.of("cancel");
-            case 2 -> switch (args[0]) {
-                case "cancel" -> Stream.of("true", "false");
-                default -> null;
-            };
+            case 1 -> Stream.of("top");
             default -> null;
         };
 
